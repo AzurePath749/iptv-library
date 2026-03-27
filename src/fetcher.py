@@ -41,15 +41,26 @@ class Fetcher:
             logger.error(f"Error fetching {url}: {e}")
             return ""
     
-    def extract_m3u_urls(self, content: str) -> List[str]:
-        """从m3u内容提取直播URL"""
-        urls = []
+    def extract_m3u_urls(self, content: str) -> List[Dict]:
+        """从m3u内容提取直播URL和频道名"""
+        sources = []
+        current_name = ""
         for line in content.split('\n'):
             line = line.strip()
-            if line and not line.startswith('#'):
-                if self._is_valid_url(line):
-                    urls.append(line)
-        return urls
+            if not line:
+                continue
+            if line.startswith('#EXTINF'):
+                match = re.search(r',(.+)$', line)
+                if match:
+                    current_name = match.group(1).strip()
+                continue
+            if not line.startswith('#') and self._is_valid_url(line):
+                sources.append({
+                    'url': line,
+                    'channel_name': current_name or ""
+                })
+                current_name = ""
+        return sources
     
     def _is_valid_url(self, url: str) -> bool:
         """验证是否为有效的直播源URL"""
@@ -81,14 +92,15 @@ class Fetcher:
         for url in urls:
             content = await self.fetch_raw(url, session)
             if content:
-                extracted_urls = self.extract_m3u_urls(content)
-                for stream_url in extracted_urls:
+                extracted = self.extract_m3u_urls(content)
+                for item in extracted:
                     sources.append({
-                        'url': stream_url,
+                        'url': item['url'],
+                        'channel_name': item.get('channel_name', ''),
                         'source': url,
                         'blogger': name,
                         'added_time': datetime.now().isoformat(),
-                        'protocol': self._get_protocol(stream_url)
+                        'protocol': self._get_protocol(item['url'])
                     })
         
         logger.info(f"Fetched {len(sources)} sources from {name}")

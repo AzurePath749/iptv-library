@@ -53,9 +53,12 @@ class Classifier:
             },
             "other": {
                 "keywords": ["印度", "中东", "非洲", "澳洲", "纽西兰", "体育", "新闻",
-                           "纪录", "电影", "儿童", "音乐"],
+                           "纪录", "电影", "儿童", "音乐", "动漫", "解说", "游戏",
+                           "赛事", "咪咕", "轮播"],
                 "keywords_en": ["India", "Africa", "Australia", "New Zealand", "Sports",
-                               "News", "Documentary", "Movie", "Kids", "Music", "Al Jazeera"]
+                               "News", "Documentary", "Movie", "Kids", "Music", "Al Jazeera",
+                               "Esports", "Bilibili", "bilibili", "huya", "douyu", "虎牙", "斗鱼",
+                               "Migu", "migu", "Anime", "Cartoon", "Music"]
             }
         }
     
@@ -75,9 +78,8 @@ class Classifier:
         return name.strip() or "Unknown"
     
     def classify(self, source: Dict) -> str:
-        """对源进行分类"""
         url = source.get('url', '')
-        name = self.extract_channel_name(url, source.get('blogger', ''))
+        name = source.get('channel_name', '') or source.get('blogger', '')
         
         combined_text = f"{url} {name}".lower()
         
@@ -108,10 +110,11 @@ class Classifier:
         for source in sources:
             category = self.classify(source)
             source['category'] = category
-            source['channel_name'] = self.extract_channel_name(
-                source['url'], 
-                source.get('blogger', '')
-            )
+            if not source.get('channel_name'):
+                source['channel_name'] = self.extract_channel_name(
+                    source['url'],
+                    source.get('blogger', '')
+                )
             categorized[category].append(source)
         
         for category, items in categorized.items():

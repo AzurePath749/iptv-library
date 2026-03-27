@@ -30,20 +30,19 @@ class IPTVManager:
         self.storage = Storage(self.config)
     
     async def fetch(self):
-        """抓取直播源"""
         logger.info("Fetching sources from bloggers...")
         sources = await self.fetcher.fetch_all()
         logger.info(f"Fetched {len(sources)} unique sources")
         return sources
     
     async def check(self):
-        """检查源可用性"""
         logger.info("Checking source availability...")
         results = await self.checker.check_all()
+        valid_count = sum(1 for r in results.values() if r.get('valid'))
+        logger.info(f"Valid: {valid_count}/{len(results)}")
         return results
     
     def classify(self, sources: list):
-        """分类并保存"""
         logger.info("Classifying sources...")
         categorized = self.classifier.classify_all(sources)
         self.classifier.save_categorized(categorized)
@@ -54,36 +53,30 @@ class IPTVManager:
         return categorized
     
     async def run_full(self):
-        """完整流程"""
         sources = await self.fetch()
-        results = await self.check()
+        results = await self.checker.check_batch(sources)
         
         valid_sources = [
-            {**{'url': url}, **result} 
-            for url, result in results.items() 
-            if result.get('valid')
+            {**source, 'checked_at': results[url]['checked_at']}
+            for url, source_dict in {s['url']: s for s in sources}.items()
+            for url, result in results.items()
+            if result.get('valid') and url in {s['url'] for s in sources}
         ]
         
-        for source in valid_sources:
-            source['url'] = source['url']
-            source['protocol'] = self._get_protocol(source['url'])
+        url_to_source = {s['url']: s for s in sources}
+        valid_sources = []
+        for url, result in results.items():
+            if result.get('valid') and url in url_to_source:
+                source = {**url_to_source[url]}
+                source['checked_at'] = result.get('checked_at', '')
+                source['response_time'] = result.get('response_time', 0)
+                valid_sources.append(source)
         
+        logger.info(f"Found {len(valid_sources)} valid sources")
         self.classify(valid_sources)
         logger.info("Done!")
     
-    def _get_protocol(self, url: str) -> str:
-        if url.startswith('https://'):
-            return 'https'
-        elif url.startswith('http://'):
-            return 'http'
-        elif url.startswith('rtmp://'):
-            return 'rtmp'
-        elif url.startswith('rtsp://'):
-            return 'rtsp'
-        return 'unknown'
-    
     def stats(self):
-        """显示统计信息"""
         stats = self.storage.get_source_stats()
         logger.info("=== Source Statistics ===")
         logger.info(f"Total: {stats['total']}")
@@ -106,7 +99,8 @@ async def main():
     elif args.action == 'check':
         await manager.check()
     elif args.action == 'classify':
-        manager.classify([])
+        sources = manager.checker.load_raw_sources()
+        manager.classify(sources)
     elif args.action == 'run':
         await manager.run_full()
     elif args.action == 'stats':
