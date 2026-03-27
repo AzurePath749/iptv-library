@@ -1,10 +1,63 @@
 [
   {
+    "name": "vbskycn",
+    "description": "iptv最新可用直播源,支持iptv4/iptv6双栈访问",
+    "level": 1,
+    "urls": [
+      "https://live.zbds.top/tv/iptv4.m3u",
+      "https://live.zbds.top/tv/iptv6.m3u"
+    ]
+  },
+  {
+    "name": "fanmingming",
+    "description": "范明明直播源，IPv4/IPv6双栈支持",
+    "level": 1,
+    "urls": [
+      "https://live.fanmingming.cn/tv/m3u/v6.m3u"
+    ]
+  },
+  {
+    "name": "YueChan",
+    "description": "IPTV直播源，纯IPv6",
+    "level": 1,
+    "urls": [
+      "https://raw.githubusercontent.com/YueChan/Live/main/IPTV.m3u"
+    ]
+  },
+  {
     "name": "YanG综合直播源",
     "description": "咪咕、游戏赛事、影视轮播等综合源",
     "level": 1,
     "urls": [
       "https://raw.githubusercontent.com/YanG-1989/m3u/main/Gather.m3u"
+    ]
+  },
+  {
+    "name": "Ftindy",
+    "description": "Ftindy精选直播源",
+    "level": 1,
+    "urls": [
+      "https://raw.githubusercontent.com/Ftindy/IPTV-URL/main/IPTV.m3u"
+    ]
+  },
+  {
+    "name": "iptv-org",
+    "description": "全球IPTV频道收集",
+    "level": 2,
+    "urls": [
+      "https://iptv-org.github.io/iptv/countries/cn.m3u",
+      "https://iptv-org.github.io/iptv/countries/tw.m3u",
+      "https://iptv-org.github.io/iptv/countries/hk.m3u"
+    ]
+  },
+  {
+    "name": "epg.pw",
+    "description": "epg.pw直播源",
+    "level": 2,
+    "urls": [
+      "https://epg.pw/test_channels.m3u",
+      "https://epg.pw/test_channels_hong_kong.m3u",
+      "https://epg.pw/test_channels_taiwan.m3u"
     ]
   }
 ]
