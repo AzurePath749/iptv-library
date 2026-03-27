@@ -7,6 +7,9 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
   check-sources:
     runs-on: ubuntu-latest
@@ -37,5 +40,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add sources/ raw/ logs/
-          git diff --staged --quiet || git commit -m "Update sources $(date +%Y-%m-%d)"
-          git push
+          git diff --staged --quiet || (git commit -m "Update sources $(date +%Y-%m-%d)" && git push)
