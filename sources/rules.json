@@ -1,0 +1,37 @@
+{
+  "china": {
+    "name": "中国频道",
+    "keywords": ["CCTV", "央视", "北京", "上海", "广东", "浙江", "江苏", "四川", 
+               "湖南", "湖北", "安徽", "福建", "山东", "河南", "河北", "天津",
+               "重庆", "凤凰", "华视", "中视", "台视", "民视", "TVBS",
+               "香港", "澳亚", "明珠", "国际", "卫视", "珠江", "深圳", "广州"],
+    "keywords_en": ["CCTV", "Hunan", "Dragon", "Phoenix", "TVB", "CTI"]
+  },
+  "asia": {
+    "name": "亚洲频道",
+    "keywords": ["日本", "韩国", "NHK", "KBS", "MBC", "SBS", "TBS", "东京",
+               "首尔", "新加坡", "马来", "泰国", "越南", "印尼", "菲律宾", "印度"],
+    "keywords_en": ["Japan", "Korea", "NHK", "KBS", "MBC", "Tokyo", "Seoul",
+                   "Singapore", "Thai", "VTV", "Doordarshan"]
+  },
+  "europe": {
+    "name": "欧洲频道",
+    "keywords": ["英国", "法国", "德国", "俄罗斯", "意大利", "西班牙", "荷兰",
+               "瑞士", "瑞典", "挪威", "丹麦", "芬兰", "波兰", "奥地利", "比利时"],
+    "keywords_en": ["BBC", "France", "Germany", "Russia", "RT", "ARD", "ZDF",
+                   "ITV", "Sky", "Euronews", "Euro", "BBC"]
+  },
+  "america": {
+    "name": "美洲频道",
+    "keywords": ["美国", "加拿大", "墨西哥", "巴西", "阿根廷", "CNN", "FOX",
+               "ABC", "CBS", "NBC", "HBO", "ESPN", "Discovery"],
+    "keywords_en": ["USA", "America", "CNN", "FOX", "ABC", "CBS", "NBC", "HBO",
+                   "ESPN", "Discovery", "National Geographic", "Canada"]
+  },
+  "other": {
+    "name": "其他频道",
+    "keywords": ["非洲", "澳洲", "纽西兰", "体育", "新闻", "纪录", "电影", "儿童", "音乐"],
+    "keywords_en": ["Africa", "Australia", "New Zealand", "Sports",
+                   "News", "Documentary", "Movie", "Kids", "Music", "Al Jazeera"]
+  }
+}

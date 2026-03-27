@@ -1,0 +1,27 @@
+# -*- coding: utf-8 -*-
+[
+  {
+    "name": "IPTV中文频道",
+    "description": "收集优质中文直播源",
+    "level": 1,
+    "urls": [
+      "https://raw.githubusercontent.com/你的用户名/iptv-repo/main/sources/china/live.m3u"
+    ]
+  },
+  {
+    "name": "亚洲直播源",
+    "description": "日本、韩国等亚洲频道",
+    "level": 1,
+    "urls": [
+      "https://raw.githubusercontent.com/你的用户名/iptv-repo/main/sources/asia/live.m3u"
+    ]
+  },
+  {
+    "name": "欧美直播源",
+    "description": "BBC、CNN等欧美频道",
+    "level": 1,
+    "urls": [
+      "https://raw.githubusercontent.com/你的用户名/iptv-repo/main/sources/europe/live.m3u"
+    ]
+  }
+]
