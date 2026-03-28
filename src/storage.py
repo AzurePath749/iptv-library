@@ -66,7 +66,7 @@ class Storage:
                         days_ago = (datetime.now() - checked_date).days
                         if days_ago <= 1:
                             stable.append(source['url'])
-                    except:
+                    except Exception:
                         pass
         
         return stable

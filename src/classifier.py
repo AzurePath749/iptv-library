@@ -92,7 +92,7 @@ class Classifier:
                     score += 1
             scores[category] = score
         
-        if max(scores.values()) > 0:
+        if scores and max(scores.values()) > 0:
             return max(scores, key=scores.get)
         else:
             return "other"

@@ -2,6 +2,7 @@
 import asyncio
 import argparse
 import logging
+import json
 from pathlib import Path
 
 from src.fetcher import Fetcher
@@ -56,13 +57,6 @@ class IPTVManager:
         sources = await self.fetch()
         results = await self.checker.check_batch(sources)
         
-        valid_sources = [
-            {**source, 'checked_at': results[url]['checked_at']}
-            for url, source_dict in {s['url']: s for s in sources}.items()
-            for url, result in results.items()
-            if result.get('valid') and url in {s['url'] for s in sources}
-        ]
-        
         url_to_source = {s['url']: s for s in sources}
         valid_sources = []
         for url, result in results.items():
@@ -99,8 +93,25 @@ async def main():
     elif args.action == 'check':
         await manager.check()
     elif args.action == 'classify':
-        sources = manager.checker.load_raw_sources()
-        manager.classify(sources)
+        raw_sources = manager.checker.load_raw_sources()
+        url_to_source = {s['url']: s for s in raw_sources}
+        
+        logs_dir = Path('logs')
+        latest_check = max(logs_dir.glob('check_results_*.json'), default=None)
+        
+        if latest_check:
+            with open(latest_check, 'r', encoding='utf-8') as f:
+                check_results = json.load(f)
+            valid_sources = [
+                {**url_to_source[url], 'checked_at': result.get('checked_at', ''), 'response_time': result.get('response_time', 0)}
+                for url, result in check_results.items()
+                if result.get('valid') and url in url_to_source
+            ]
+            logger.info(f"Loaded {len(valid_sources)} valid sources from {latest_check.name}")
+            manager.classify(valid_sources)
+        else:
+            logger.warning("No check results found, classifying raw sources...")
+            manager.classify(raw_sources)
     elif args.action == 'run':
         await manager.run_full()
     elif args.action == 'stats':
